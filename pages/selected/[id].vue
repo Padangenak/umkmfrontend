@@ -13,20 +13,20 @@
 							class="h-96 w-full max-md:my-5 md:my-12 bg-gray-200 skeleton"
 							v-if="loading"
 						/>
-						<div v-else>
+						<div class="md:h-[70vh] max-md:h-[20vh]" v-else>
 							<img
 								:src="`${STORAGE_API}/${datas.attachment.filename}`"
-								class="max-md:py-5 md:py-12 rounded"
+								class="max-md:py-5 md:py-12 h-full rounded"
 								v-if="selected.name == ''"
 							/>
 							<img
 								:src="`${STORAGE_API}/${datas.attachment.filename}`"
-								class="max-md:py-5 md:py-12 rounded"
+								class="max-md:py-5 md:py-12 h-full rounded"
 								v-else-if="selected.attachment.length == 0"
 							/>
 							<img
 								:src="`${STORAGE_API}/${selected.currentImage}`"
-								class="max-md:py-5 md:py-12 rounded"
+								class="max-md:py-5 md:py-12 h-full rounded"
 								v-else
 							/>
 						</div>
@@ -37,7 +37,7 @@
 					>
 						<div
 							v-for="i in selected.attachment"
-							class="w-2/12 h-20 bg-cover bg-center rounded cursor-pointer"
+							class="md:w-2/12 md:h-20 max-md:w-14 max-md:h-14 bg-cover bg-center rounded cursor-pointer"
 							:class="{
 								'border-4 border-red-600':
 									selected.currentImage == i.filename,

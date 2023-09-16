@@ -21,4 +21,5 @@
 const props = defineProps({
 	datas: Object,
 });
+// console.log(props.datas)
 </script>

@@ -22,11 +22,11 @@
 			<div v-else>
 				<p class="text-sm text-gray-400 leading-none line-through">
 					{{ rupiah(props.product.price) }}
-					<small class="">/pcs</small>
+					<small class="">/{{ type(props.product.type) }}</small>
 				</p>
 				<p class="text-base text-red-600 leading-none">
 					{{ rupiah(discon(props.product.price)) }}
-					<small class="text-gray-600">/pcs</small>
+					<small class="text-gray-600">/{{ type(props.product.type) }}</small>
 					<span
 						class="text-xs bg-red-600 text-white px-1 mx-2"
 						v-if="props.product.discon != 0"
@@ -50,7 +50,7 @@ const props = defineProps({
 });
 
 const { STORAGE_API } = apiData();
-const rupiah = (number) => {
+const rupiah = (number) => {	
 	return new Intl.NumberFormat("id-ID", {
 		style: "currency",
 		currency: "IDR",

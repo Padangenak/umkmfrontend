@@ -59,7 +59,7 @@
 					v-else
 				>
 					<NuxtLink
-						v-for="i in datas.product"
+						v-for="i in datas.product.more"
 						class="border rounded hover:border-gray-400 cursor-pointer"
 						:to="`/selected/${i.id}`"
 					>
@@ -103,6 +103,15 @@
 					</NuxtLink>
 				</div>
 			</div>
+			<div class="flex justify-center mt-10">
+				<Button
+					outlined
+					severity="danger"
+					@click="loadMore"
+					v-if="buttonLoadMore"
+					>Load More</Button
+				>
+			</div>
 		</div>
 	</div>
 </template>
@@ -110,18 +119,23 @@
 <script type="text/javascript" setup>
 // import { Star, PersonAdd, BagSharp, LogoWhatsapp } from "@vicons/ionicons5";
 import { ref, watchEffect } from "vue";
+import Button from "primevue/button";
 
 const { ROUTE_LIST, STORAGE_API } = apiData();
 const route = useRoute();
 const loading = ref(false);
-const datas = ref({
+const buttonLoadMore = ref(true);
+let datas = ref({
 	address: null,
 	attachment: {
 		filename: null,
 	},
 	name: null,
 	phone_number: null,
-	product: [],
+	product: {
+		all: [],
+		more: [],
+	},
 	store: null,
 });
 
@@ -133,10 +147,13 @@ watchEffect(async () => {
 			datas.value.attachment.filename = val.attachment.filename;
 			datas.value.name = val.name;
 			datas.value.phone_number = val.phone_number;
-			datas.value.product.push(...val.product);
+			datas.value.product.all.push(...val.product);
 			datas.value.store = val.store;
 		})
 		.then(() => (loading.value = false));
+
+	loadMore();
+	
 });
 const rupiah = (number) => {
 	return new Intl.NumberFormat("id-ID", {
@@ -147,9 +164,23 @@ const rupiah = (number) => {
 const discon = (val) => {
 	if (val != null) {
 		let discon = (val.price * val.discon) / 100;
-		return val.price-discon;
+		return val.price - discon;
 	}
 };
+function loadMore() {
+	let number = datas.value.product.more.length;
+	for (let i = number; i < number + 10; i++) {
+		datas.value.product.all[i]
+			? datas.value.product.more.push(datas.value.product.all[i])
+			: "";
+	}
+	moreButton();
+}
+function moreButton() {
+	if (datas.value.product.all.length <= datas.value.product.more.length) {
+		buttonLoadMore.value = false;
+	}
+}
 </script>
 <style>
 .skeleton {
