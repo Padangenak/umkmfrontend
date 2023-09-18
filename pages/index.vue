@@ -1,5 +1,6 @@
 <template>
 	<div class="md:pb-20">
+		<img src="https://umkmbackend.cloudoffice.web.id/images/AAW4DATR6bagEAmfs4XqVcJl7rvFqBKpUgnn0LUg.jpg">
 		<div class="card flex justify-content-center">
 			<Dialog
 				v-model:visible="visible"
