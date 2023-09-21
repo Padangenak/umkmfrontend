@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import axios from 'axios'
 export default defineNuxtConfig({
   // devtools: { enabled: true },
   css: [
@@ -10,7 +11,9 @@ export default defineNuxtConfig({
     transpile: ['primevue']
   },
   generate: {
-    fallback: true
+    routes(calllback){
+      console.log(calllback)
+    }
   },
   postcss: {
     plugins: {

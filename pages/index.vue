@@ -1,6 +1,6 @@
 <template>
 	<div class="md:pb-20">
-		<img src="https://umkmbackend.cloudoffice.web.id/images/AAW4DATR6bagEAmfs4XqVcJl7rvFqBKpUgnn0LUg.jpg">
+		<!-- <img src="https://umkmbackend.cloudoffice.web.id/images/AAW4DATR6bagEAmfs4XqVcJl7rvFqBKpUgnn0LUg.jpg"> -->
 		<div class="card flex justify-content-center">
 			<Dialog
 				v-model:visible="visible"
@@ -297,6 +297,7 @@ watchEffect(async () => {
 			loading.value = false;
 		});
 	await $fetch("/api/provinces.json").then((val) => address.value.push(...val));
+	console.log(datas.value)
 
 	for (let i = 0; i < 10; i++) {
 		datas.value.all[i] ? datas.value.more.all.push(datas.value.all[i]) : "";
@@ -381,30 +382,58 @@ watch(selectedType, () => {
 
 function loadMore() {
 	if (regenciesSelect.value == "") {
-			for (let i = datas.value.more[selectedType.value].length;	i < datas.value.more[selectedType.value].length + 10;	i++) {
-				datas.value[selectedType.value][i] ? datas.value.more[selectedType.value].push(datas.value[selectedType.value][i]) : "";
-			}
-			datas.value[selectedType.value].length <= datas.value.more[selectedType.value].length	? (moreButton.value = false) : (moreButton.value = true);
+		for (
+			let i = datas.value.more[selectedType.value].length;
+			i < datas.value.more[selectedType.value].length + 10;
+			i++
+		) {
+			datas.value[selectedType.value][i]
+				? datas.value.more[selectedType.value].push(
+						datas.value[selectedType.value][i],
+				  )
+				: "";
+		}
+		datas.value[selectedType.value].length <=
+		datas.value.more[selectedType.value].length
+			? (moreButton.value = false)
+			: (moreButton.value = true);
 	} else {
-		for (let i = datas.value.more.location[selectedType.value].length;	i < datas.value.more.location[selectedType.value].length + 10;	i++) {
-				datas.value.location[selectedType.value][regenciesSelect.value][i] ? datas.value.more.location[selectedType.value].push(datas.value.location[selectedType.value][regenciesSelect.value][i]) : "";
-			}
-			datas.value.location[selectedType.value].length <= datas.value.more.location[selectedType.value].length	? (moreButton.value = false) : (moreButton.value = true);
+		for (
+			let i = datas.value.more.location[selectedType.value].length;
+			i < datas.value.more.location[selectedType.value].length + 10;
+			i++
+		) {
+			datas.value.location[selectedType.value][regenciesSelect.value][i]
+				? datas.value.more.location[selectedType.value].push(
+						datas.value.location[selectedType.value][regenciesSelect.value][i],
+				  )
+				: "";
+		}
+		datas.value.location[selectedType.value].length <=
+		datas.value.more.location[selectedType.value].length
+			? (moreButton.value = false)
+			: (moreButton.value = true);
 	}
 }
 function moreButtonLocation() {
-	if (datas.value.location[selectedType.value].hasOwnProperty(regenciesSelect.value)) {
-		datas.value.location[selectedType.value][regenciesSelect.value].length <= datas.value.more.location[selectedType.value].length
+	if (
+		datas.value.location[selectedType.value].hasOwnProperty(
+			regenciesSelect.value,
+		)
+	) {
+		datas.value.location[selectedType.value][regenciesSelect.value].length <=
+		datas.value.more.location[selectedType.value].length
 			? (moreButton.value = false)
 			: (moreButton.value = true);
-	}else{
-		moreButton.value = false
+	} else {
+		moreButton.value = false;
 	}
 }
 function moreButtonMore() {
-		datas.value[selectedType.value].length <= datas.value.more[selectedType.value].length
-			? moreButton.value = false
-			: moreButton.value = true;
+	datas.value[selectedType.value].length <=
+	datas.value.more[selectedType.value].length
+		? (moreButton.value = false)
+		: (moreButton.value = true);
 }
 function datasLocationValue() {
 	let types = ["all", "food", "item"];
@@ -424,7 +453,7 @@ function moreLocationDataFirst() {
 	let types = ["all", "food", "item"];
 	let current = regenciesSelect.value;
 	types.forEach((type) => {
-		datas.value.more.location[type] = []
+		datas.value.more.location[type] = [];
 		for (let i = datas.value.more.location[type].length; i < 10; i++) {
 			if (datas.value.location[type].hasOwnProperty(regenciesSelect.value)) {
 				datas.value.location[type][regenciesSelect.value][i]
@@ -435,7 +464,6 @@ function moreLocationDataFirst() {
 			}
 		}
 	});
-	
 }
 </script>
 <style scoped>

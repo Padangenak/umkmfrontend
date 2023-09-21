@@ -48,7 +48,7 @@
 const props = defineProps({
 	product: Object,
 });
-
+// console.log(props.product)
 const { STORAGE_API } = apiData();
 const rupiah = (number) => {	
 	return new Intl.NumberFormat("id-ID", {
