@@ -297,7 +297,6 @@ watchEffect(async () => {
 			loading.value = false;
 		});
 	await $fetch("/api/provinces.json").then((val) => address.value.push(...val));
-	console.log(datas.value)
 
 	for (let i = 0; i < 10; i++) {
 		datas.value.all[i] ? datas.value.more.all.push(datas.value.all[i]) : "";
