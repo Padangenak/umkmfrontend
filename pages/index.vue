@@ -6,12 +6,18 @@
 				v-model:visible="visible"
 				modal
 				header="Cari Produk"
-				class="md:w-[50vw] max-md:w-[80vw]"
+				class="md:w-[50vw] max-md:w-[95vw]"
 			>
-				<div class="card flex flex-wrap justify-content-center gap-3 py-3">
+				<div
+					class="card flex flex-wrap justify-content-center gap-3 py-3"
+				>
 					<span class="p-input-icon-left w-full">
 						<SearchOutline class="w-4" />
-						<InputText v-model="search" placeholder="Search" class="w-full" />
+						<InputText
+							v-model="search"
+							placeholder="Search"
+							class="w-full"
+						/>
 					</span>
 					<div class="h-72 overflow-y-auto w-full">
 						<div
@@ -22,36 +28,47 @@
 							<p class="text-2xl font-semibold flex px-2">Cari</p>
 						</div>
 						<div v-if="search != ''">
-							<NuxtLink :to="`/selected/${i.id}`" v-for="i in searchData">
+							<NuxtLink
+								:to="`/selected/${i.id}`"
+								v-for="i in searchDataLimit"
+							>
 								<div
-									class="flex cursor-pointer hover:bg-gray-100 p-5 rounded items-center"
+									class="flex cursor-pointer hover:bg-gray-100 px-1 py-2 rounded items-center"
 								>
 									<div
-										class="w-16 h-16 bg-cover bg-center rounded-full"
+										class="max-md:w-24 max-md:h-24 md:w-28 md:h-28 bg-cover bg-center rounded-full"
 										:style="{
 											'background-image': `url('${STORAGE_API}/${i.attachment.filename}')`,
 										}"
 									/>
-									<div class="px-5">
-										<p class="font-semibold">
+									<div class="px-3">
+										<p
+											class="md:text-base max-md:text-sm font-semibold"
+										>
 											{{ i.product }}
 										</p>
 										<div v-if="i.discon == 0">
-											<p class="font-semibold text-red-600">
+											<p
+												class="md:text-base max-md:text-sm font-semibold text-red-600"
+											>
 												{{ rupiah(i.price) }}
 											</p>
 										</div>
 
 										<div v-else>
 											<p
-												class="text-sm text-gray-400 leading-none line-through"
+												class="md:text-base max-md:text-sm text-sm text-gray-400 leading-none line-through"
 											>
 												{{ rupiah(i.price) }}
 												<small class="">/pcs</small>
 											</p>
-											<p class="text-base text-red-600 leading-none">
+											<p
+												class="md:text-base max-md:text-sm text-base text-red-600 leading-none"
+											>
 												{{ rupiah(discon(i)) }}
-												<small class="text-gray-600">/pcs</small>
+												<small class="text-gray-600"
+													>/pcs</small
+												>
 												<span
 													class="text-xs bg-red-600 text-white px-1 mx-2"
 													v-if="i.discon != 0"
@@ -63,6 +80,19 @@
 								</div>
 							</NuxtLink>
 						</div>
+						<div class="flex justify-center py-2">
+							<button
+								class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 hover:text-white transition"
+								v-if="
+									searchData.length != 0 &&
+									search != '' &&
+									searchDataLimit.length < searchData.length
+								"
+								@click="searchAdd"
+							>
+								Load More
+							</button>
+						</div>
 					</div>
 				</div>
 			</Dialog>
@@ -70,7 +100,7 @@
 		<div class="w-full">
 			<div class="w-full md:flex">
 				<div
-					class="max-md:w-full md:w-6/12 h-[50vh] md:px-20 max-md:px-5 py-10"
+					class="max-md:w-full md:w-6/12 md:h-[50vh] max-md:h-[45vh] md:px-20 max-md:px-5 py-10"
 				>
 					<NuxtLink to="/" class="text-2xl font-black w-fit">
 						UMKM AJAIB
@@ -94,7 +124,9 @@
 									/>
 								</div>
 								<div>
-									<button class="rounded-r h-full px-3 border-4 hover:">
+									<button
+										class="rounded-r h-full px-3 border-4 hover:"
+									>
 										<SearchOutline class="text-black w-5" />
 									</button>
 								</div>
@@ -117,78 +149,73 @@
 					</div>
 				</div>
 			</div>
-			<div class="max-md:px-5 md:px-20">
-				<h1 class="text-lg font-semibold">Produk</h1>
-				<div class="mt-5 gap-3 flex">
-					<button
-						class="px-3 py-2 border border-gray-500 rounded hover:bg-red-600 hover:text-white hover:border-red-600 transition"
-						:class="{
-							'bg-red-600 text-white border-red-600': selectedType == 'all',
-						}"
-						@click="selectedType = 'all'"
-					>
-						Semua
-					</button>
-					<button
-						class="px-3 py-2 border border-gray-500 rounded hover:bg-red-600 hover:text-white hover:border-red-600 transition"
-						:class="{
-							'bg-red-600 text-white border-red-600': selectedType == 'food',
-						}"
-						@click="selectedType = 'food'"
-					>
-						Makanan
-					</button>
-					<button
-						class="px-3 py-2 border border-gray-500 rounded hover:bg-red-600 hover:text-white hover:border-red-600 transition"
-						:class="{
-							'bg-red-600 text-white border-red-600': selectedType == 'item',
-						}"
-						@click="selectedType = 'item'"
-					>
-						Barang
-					</button>
-				</div>
-				<div class="md:flex gap-3">
-					<div>
-						<select
-							class="border border-gray-500 rounded px-2 py-2 my-3 cursor-pointer"
-							v-model="provincesSelect"
-						>
-							<option class="cursor-pointer" value="">Provinsi</option>
-							<option
-								class="cursor-pointer"
-								v-for="(addressOne, index) in address"
+			<div class="max-md:px-1 md:px-20">
+				<div class="max-md:px-2">
+					<h1 class="text-lg font-semibold">Produk</h1>
+					<div class="mt-5 gap-3 flex"></div>
+					<div class="md:flex md:gap-3 items-center">
+						<div>
+							<select v-model="selectedType" class="border border-gray-500 rounded px-2 py-2 my-3 cursor-pointer">
+								<option value="all">Semua</option>
+								<option
+									v-for="category in datas.category"
+									:value="category"
+								>
+									{{ category }}
+								</option>
+							</select>
+						</div>
+						<div>
+							<select
+								class="border border-gray-500 rounded px-2 py-2 my-3 cursor-pointer"
+								v-model="provincesSelect"
 							>
-								{{ addressOne.name }}
-							</option>
-						</select>
-					</div>
-					<div>
-						<select
-							class="border border-gray-500 rounded px-2 py-2 md:mt-3 mb-3 cursor-pointer"
-							v-model="regenciesSelect"
-							v-if="provincesSelect != ''"
-						>
-							<option class="cursor-pointer" value="">Kab/Kota</option>
-							<option
-								class="cursor-pointer"
-								v-for="(addressTwo, index) in regencies"
+								<option class="cursor-pointer" value="">
+									Provinsi
+								</option>
+								<option
+									class="cursor-pointer"
+									v-for="(addressOne, index) in address"
+								>
+									{{ addressOne.name }}
+								</option>
+							</select>
+						</div>
+						<div>
+							<select
+								class="border border-gray-500 rounded px-2 py-2 md:mt-3 mb-3 cursor-pointer"
+								v-model="regenciesSelect"
+								v-if="provincesSelect != ''"
 							>
-								{{ addressTwo.name }}
-							</option>
-						</select>
+								<option class="cursor-pointer" value="">
+									Kab/Kota
+								</option>
+								<option
+									class="cursor-pointer"
+									v-for="(addressTwo, index) in regencies"
+								>
+									{{ addressTwo.name }}
+								</option>
+							</select>
+						</div>
 					</div>
-				</div>
-				<div
-					class="flex grid max-md:grid-cols-2 md:grid-cols-5 gap-5"
-					v-if="loading"
-				>
-					<div v-for="i in 5" class="">
-						<div class="bg-gray-300 h-52 rounded-t skeleton" />
-						<div class="px-2">
-							<div class="w-full h-4 bg-gray-300 my-2 rounded skeleton"></div>
-							<div class="w-full h-4 bg-gray-300 mt-3 rounded skeleton"></div>
-							<div class="w-full h-3 bg-gray-300 my-2 rounded skeleton"></div>
+					<div
+						class="flex grid max-md:grid-cols-2 md:grid-cols-5 gap-5"
+						v-if="loading"
+					>
+						<div v-for="i in 5" class="">
+							<div class="bg-gray-300 h-52 rounded-t skeleton" />
+							<div class="px-2">
+								<div
+									class="w-full h-4 bg-gray-300 my-2 rounded skeleton"
+								></div>
+								<div
+									class="w-full h-4 bg-gray-300 mt-3 rounded skeleton"
+								></div>
+								<div
+									class="w-full h-3 bg-gray-300 my-2 rounded skeleton"
+								></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -200,7 +227,10 @@
 								:datas="datas.more.all"
 								v-if="regenciesSelect == ''"
 							/>
-							<ValidationLocation :datas="datas.more.location.all" v-else />
+							<ValidationLocation
+								:datas="datas.more.location.all"
+								v-else
+							/>
 							<div class="flex justify-center mt-10">
 								<Button
 									outlined
@@ -212,31 +242,16 @@
 							</div>
 						</div>
 					</Transition>
-					<Transition name="fade">
-						<div v-if="selectedType == 'food'">
+					<Transition name="fade" v-for="category in datas.category">
+						<div v-if="selectedType == category">
 							<ValidationLocation
-								:datas="datas.more.food"
+								:datas="datas.more[category]"
 								v-if="regenciesSelect == ''"
 							/>
-							<ValidationLocation :datas="datas.more.location.food" v-else />
-							<div class="flex justify-center mt-10">
-								<Button
-									outlined
-									severity="danger"
-									@click="loadMore"
-									v-if="moreButton"
-									>Load More</Button
-								>
-							</div>
-						</div>
-					</Transition>
-					<Transition name="fade">
-						<div v-if="selectedType == 'item'">
 							<ValidationLocation
-								:datas="datas.more.item"
-								v-if="regenciesSelect == ''"
+								:datas="datas.more.location[category]"
+								v-else
 							/>
-							<ValidationLocation :datas="datas.more.location.item" v-else />
 							<div class="flex justify-center mt-10">
 								<Button
 									outlined
@@ -265,17 +280,15 @@ let loading = ref(false);
 
 let datas = ref({
 	all: [],
-	food: [],
-	item: [],
-	location: { all: [], food: [], item: [] },
+	category: [],
+	location: { all: [] },
 	more: {
 		all: [],
-		food: [],
-		item: [],
-		location: { all: [], food: [], item: [] },
+		location: { all: [] },
 	},
 });
 let searchData = ref([]);
+let searchDataLimit = ref([]);
 let address = ref([]);
 let regencies = ref([]);
 let more = ref(true);
@@ -288,26 +301,42 @@ watchEffect(async () => {
 	loading.value = true;
 	await $fetch(ROUTE_LIST.PRODUCT_GET)
 		.then((val) => {
-			datas.value.food.push(...val.food);
-			datas.value.item.push(...val.item);
-			datas.value.all.push(...val.all);
+			datas.value.all.push(...val.data);
 		})
-		.catch((error) => error.data)
 		.finally(() => {
 			loading.value = false;
 		});
-	await $fetch("/api/provinces.json").then((val) => address.value.push(...val));
+	await $fetch(ROUTE_LIST.CATEGORY_PRODUCT)
+		.then((val) => {
+			val.data.forEach((product) => {
+				datas.value[product.category] = [...product.data];
+				datas.value.category.push(product.category);
+				datas.value.more[product.category] = [];
+				datas.value.more.location[product.category] = [];
+				datas.value.location[product.category] = [];
+			});
+		})
+		.finally(() => {
+			loading.value = false;
+		});
+	await $fetch("/api/provinces.json").then((val) =>
+		address.value.push(...val),
+	);
 
 	for (let i = 0; i < 10; i++) {
 		datas.value.all[i] ? datas.value.more.all.push(datas.value.all[i]) : "";
-		datas.value.food[i] ? datas.value.more.food.push(datas.value.food[i]) : "";
-		datas.value.item[i] ? datas.value.more.item.push(datas.value.item[i]) : "";
+		datas.value.category.forEach((val) => {
+			datas.value[val][i]
+				? datas.value.more[val].push(datas.value[val][i])
+				: "";
+		});
 	}
 	if (regenciesSelect.value != "") {
 		moreButtonLocation();
 	} else {
 		moreButtonMore();
 	}
+	// console.log(datas.value)
 });
 
 const visible = ref(false);
@@ -337,6 +366,8 @@ watch(search, () => {
 		});
 		searchData.value = [];
 		searchData.value = [...filterData];
+		searchDataLimit.value = [];
+		searchAdd();
 	}
 });
 const rupiah = (number) => {
@@ -372,6 +403,7 @@ watch(regenciesSelect, () => {
 });
 
 watch(selectedType, () => {
+	console.log(selectedType.value);
 	if (regenciesSelect.value != "") {
 		moreButtonLocation();
 	} else {
@@ -404,7 +436,9 @@ function loadMore() {
 		) {
 			datas.value.location[selectedType.value][regenciesSelect.value][i]
 				? datas.value.more.location[selectedType.value].push(
-						datas.value.location[selectedType.value][regenciesSelect.value][i],
+						datas.value.location[selectedType.value][
+							regenciesSelect.value
+						][i],
 				  )
 				: "";
 		}
@@ -420,8 +454,8 @@ function moreButtonLocation() {
 			regenciesSelect.value,
 		)
 	) {
-		datas.value.location[selectedType.value][regenciesSelect.value].length <=
-		datas.value.more.location[selectedType.value].length
+		datas.value.location[selectedType.value][regenciesSelect.value]
+			.length <= datas.value.more.location[selectedType.value].length
 			? (moreButton.value = false)
 			: (moreButton.value = true);
 	} else {
@@ -435,7 +469,8 @@ function moreButtonMore() {
 		: (moreButton.value = true);
 }
 function datasLocationValue() {
-	let types = ["all", "food", "item"];
+	let types = ["all", ...datas.value.category];
+	console.log(types)
 	types.forEach((type) => {
 		datas.value.location[type] = [];
 		datas.value[type].forEach((val) => {
@@ -449,20 +484,33 @@ function datasLocationValue() {
 	});
 }
 function moreLocationDataFirst() {
-	let types = ["all", "food", "item"];
+	let types = ["all", ...datas.value.category];
 	let current = regenciesSelect.value;
 	types.forEach((type) => {
 		datas.value.more.location[type] = [];
 		for (let i = datas.value.more.location[type].length; i < 10; i++) {
-			if (datas.value.location[type].hasOwnProperty(regenciesSelect.value)) {
+			if (
+				datas.value.location[type].hasOwnProperty(regenciesSelect.value)
+			) {
 				datas.value.location[type][regenciesSelect.value][i]
 					? datas.value.more.location[type].push(
-							datas.value.location[type][regenciesSelect.value][i],
+							datas.value.location[type][regenciesSelect.value][
+								i
+							],
 					  )
 					: "";
 			}
 		}
 	});
+}
+function searchAdd() {
+	let length = searchDataLimit.value.length;
+	for (let i = length; i < length + 10; i++) {
+		if (i >= searchData.value.length) {
+			break;
+		}
+		searchDataLimit.value.push(searchData.value[i]);
+	}
 }
 </script>
 <style scoped>

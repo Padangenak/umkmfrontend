@@ -1,7 +1,7 @@
 <template>
 	<div class="md:pb-20">
-		<div class="w-full max-md:px-5 md:px-20">
-			<nav class="py-10">
+		<div class="w-full max-md:px-2 md:px-20">
+			<nav class="py-10 px-3">
 				<NuxtLink to="/" class="text-2xl font-black w-fit">
 					UMKM AJAIB
 				</NuxtLink>
@@ -55,7 +55,7 @@
 					</div>
 				</div>
 				<div
-					class="flex grid md:grid-cols-3 max-md:grid-cols-2 w-full text-left gap-5"
+					class="flex grid md:grid-cols-3 max-md:grid-cols-2 w-full text-left md:gap-5 max-md:gap-1"
 					v-else
 				>
 					<NuxtLink
@@ -143,12 +143,13 @@ watchEffect(async () => {
 	loading.value = true;
 	await $fetch(`${ROUTE_LIST.USER_ID}${route.params.id}`)
 		.then((val) => {
-			datas.value.address = val.address;
-			datas.value.attachment.filename = val.attachment.filename;
-			datas.value.name = val.name;
-			datas.value.phone_number = val.phone_number;
-			datas.value.product.all.push(...val.product);
-			datas.value.store = val.store;
+			console.log(val)
+			datas.value.address = val.data.address;
+			datas.value.attachment.filename = val.data.attachment.filename;
+			datas.value.name = val.data.name;
+			datas.value.phone_number = val.data.phone_number;
+			datas.value.product.all.push(...val.data.product);
+			datas.value.store = val.data.store;
 		})
 		.then(() => (loading.value = false));
 

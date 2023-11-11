@@ -2,6 +2,7 @@
 import axios from 'axios'
 export default defineNuxtConfig({
   // devtools: { enabled: true },
+  ssr: false,
   css: [
     '~/assets/css/main.css',
     'primevue/resources/themes/saga-blue/theme.css',
@@ -9,11 +10,6 @@ export default defineNuxtConfig({
     ],
   build: {
     transpile: ['primevue']
-  },
-  generate: {
-    routes(calllback){
-      console.log(calllback)
-    }
   },
   postcss: {
     plugins: {

@@ -2,7 +2,7 @@
 	<div class="border border-gray-100 rounded hover:border-gray-400">
 		<!-- {{ props.product }} -->
 		<div
-			class="max-md:h-[20vh] md:h-[40vh] bg-cover bg-center rounded-t"
+			class="max-md:h-[30vh] md:h-[40vh] bg-cover bg-center rounded-t"
 			:style="{
 				'background-image': `url(${STORAGE_API}/${props.product.attachment.filename})`,
 			}"
@@ -12,39 +12,42 @@
 				props.product.product
 			}}</small>
 			<div v-if="props.product.discon == 0">
-				<p class="text-base text-red-600 leading-none">
-					{{ rupiah(props.product.price)
-					}}<small class="text-gray-600"
-						>/{{ type(props.product.type) }}</small
+				<div class="text-base text-red-600 leading-none flex items-center">
+					<p class="font-semibold">{{ rupiah(props.product.price) }}</p>
+					<small class="text-gray-600"
+						>/{{ props.product.category.category }}</small
 					>
-				</p>
+				</div>
 			</div>
 			<div v-else>
-				<p class="text-sm text-gray-400 leading-none line-through">
-					{{ rupiah(props.product.price) }}
-					<small class="">/{{ type(props.product.type) }}</small>
-				</p>
-				<p class="text-base text-red-600 leading-none">
-					{{ rupiah(discon(props.product.price)) }}
-					<small class="text-gray-600">/{{ type(props.product.type) }}</small>
+				<div class="text-sm text-gray-400 leading-none line-through flex items-center">
+					<p>{{ rupiah(props.product.price) }}</p>
+					<small class="text-gray-600">/{{ props.product.category.category }}</small>
+				</div>
+				<div class="text-base text-red-600 leading-none flex items-center">
+					<p class="font-semibold">{{ rupiah(discon(props.product.price)) }}</p>
+					<small class="text-gray-600">/{{ props.product.category.category }}</small>
 					<span
 						class="text-xs bg-red-600 text-white px-1 mx-2"
 						v-if="props.product.discon != 0"
 						>{{ props.product.discon }}%</span
 					>
-				</p>
+				</div>
 			</div>
-			<small
-				>{{ props.product.user.store }} ({{
-					props.product.user.address
-				}})</small
-			>
+			<small>{{ props.product.user.store }}</small>
+			<br>
+			<div class="flex gap-1 text-gray-700 text-sm">
+				<LocationOutline class="w-3" />
+			<small class="">{{props.product.user.address}}</small>
+			</div>
 		</div>
 	</div>
 	<!-- {{ props.product }} -->
 	<!-- <pre>{{ props.product.active }}</pre> -->
 </template>
 <script type="text/javascript" setup>
+import { LocationOutline } from "@vicons/ionicons5";
+
 const props = defineProps({
 	product: Object,
 });

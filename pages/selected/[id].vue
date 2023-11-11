@@ -1,7 +1,7 @@
 <template>
 	<div class="md:pb-20">
 		<div class="w-full">
-			<nav class="max-md:px-5 md:px-20 pt-10">
+			<nav class="max-md:px-5 md:px-20 py-10">
 				<NuxtLink to="/" class="text-2xl font-black w-fit">
 					UMKM AJAIB
 				</NuxtLink>
@@ -13,26 +13,26 @@
 							class="h-96 w-full max-md:my-5 md:my-12 bg-gray-200 skeleton"
 							v-if="loading"
 						/>
-						<div class="md:h-[70vh] max-md:h-[20vh]" v-else>
+						<div class="md:h-[70vh] max-md:h-[40vh] flex items-center overflow-hidden" v-else>
 							<img
 								:src="`${STORAGE_API}/${datas.attachment.filename}`"
-								class="max-md:py-5 md:py-12 h-full rounded"
+								class="max-md:py-5 md:py-12 rounded h-auto"
 								v-if="selected.name == ''"
 							/>
 							<img
 								:src="`${STORAGE_API}/${datas.attachment.filename}`"
-								class="max-md:py-5 md:py-12 h-full rounded"
+								class="max-md:py-5 md:py-12 rounded h-auto"
 								v-else-if="selected.attachment.length == 0"
 							/>
 							<img
 								:src="`${STORAGE_API}/${selected.currentImage}`"
-								class="max-md:py-5 md:py-12 h-full rounded"
+								class="max-md:py-5 md:py-12 rounded h-auto"
 								v-else
 							/>
 						</div>
 					</div>
 					<div
-						class="w-full flex flex-wrap gap-1 justify-center"
+						class="w-full flex flex-wrap gap-1 justify-center py-5"
 						v-if="selected.name != ''"
 					>
 						<div
@@ -129,13 +129,13 @@
 <!-- 							<p class="" v-if="datas.discon == 0">
 								{{ rupiah(datas.price) }}
 								<small class="text-sm">
-									/{{ type(datas.type) }}
+									/{{ category(datas.category) }}
 								</small>
 							</p> -->
 							<p class="" >
 								{{ rupiah(discon(datas.price)) }}
 								<small class="text-sm">
-									/{{ type(datas.type) }}
+									/{{ category(datas.category) }}
 								</small>
 								<span
 								class="text-sm bg-red-600 text-white px-2 ml-3"
@@ -269,7 +269,7 @@ let datas = ref({
 	id: null,
 	price: null,
 	product: null,
-	type: null,
+	category: null,
 	user: {
 		id: null,
 		name: null,
@@ -291,27 +291,28 @@ watch(
 		loading.value = true;
 		await $fetch(`${ROUTE_LIST.PRODUCT_ID}${route.params.id}`)
 			.then((val) => {
-				datas.value.active = val.active;
-				datas.value.attachment.id = val.attachment.id;
-				datas.value.attachment.filename = val.attachment.filename;
-				datas.value.attachment.path = val.attachment.path;
-				datas.value.count = val.count;
-				datas.value.description = val.description;
-				datas.value.discon = val.discon;
-				datas.value.id = val.id;
-				datas.value.price = val.price;
-				datas.value.product = val.product;
-				datas.value.type = val.type;
-				datas.value.user.address = val.user.address;
-				datas.value.user.id = val.user.id;
-				datas.value.user.name = val.user.name;
-				datas.value.user.store = val.user.store;
-				datas.value.user.phone_number = val.user.phone_number;
+				console.log(val)
+				datas.value.active = val.data.active;
+				datas.value.attachment.id = val.data.attachment.id;
+				datas.value.attachment.filename = val.data.attachment.filename;
+				datas.value.attachment.path = val.data.attachment.path;
+				datas.value.count = val.data.count;
+				datas.value.description = val.data.description;
+				datas.value.discon = val.data.discon;
+				datas.value.id = val.data.id;
+				datas.value.price = val.data.price;
+				datas.value.product = val.data.product;
+				datas.value.category = val.data.category.category;
+				datas.value.user.address = val.data.user.address;
+				datas.value.user.id = val.data.user.id;
+				datas.value.user.name = val.data.user.name;
+				datas.value.user.store = val.data.user.store;
+				datas.value.user.phone_number = val.data.user.phone_number;
 				datas.value.user.attachment.filename =
-					val.user.attachment.filename;
-				datas.value.user.attachment.path = val.user.attachment.path;
-				datas.value.user_id = val.user_id;
-				datas.value.variant.push(...val.variant);
+					val.data.user.attachment.filename;
+				datas.value.user.attachment.path = val.data.user.attachment.path;
+				datas.value.user_id = val.data.user_id;
+				datas.value.variant.push(...val.data.variant);
 			})
 			.then(() => (loading.value = false));
 	},
@@ -329,7 +330,7 @@ const discon = (val) => {
 		return val-discon;
 	}
 };
-const type = (val) => {
+const category = (val) => {
 	if (val != null) {
 		let split = val.split("/");
 		return split[split.length - 1];

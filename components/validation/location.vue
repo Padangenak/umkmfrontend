@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div
-			class="flex grid md:grid-cols-5 max-md:grid-cols-2 gap-5"
+			class="flex grid md:grid-cols-5 max-md:grid-cols-2 md:gap-5 max-md:gap-1"
 			v-if="datas.length != 0"
 		>
 			<NuxtLink
@@ -21,5 +21,4 @@
 const props = defineProps({
 	datas: Object,
 });
-// console.log(props.datas)
 </script>

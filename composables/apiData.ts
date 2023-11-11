@@ -6,7 +6,8 @@ export default ()=>{
 		PRODUCT_GET: `${URL_API}/product/get`,
 		PRODUCT_ID: `${URL_API}/product/`,
 		PRODUCT_COUNT_POST: `${URL_API}/product/`,
-		USER_ID: `${URL_API}/user/`
+		USER_ID: `${URL_API}/user/`,
+		CATEGORY_PRODUCT: `${URL_API}/category/get`
 	}
 
 	return { ROUTE_LIST, STORAGE_API }
